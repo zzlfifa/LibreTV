@@ -1,5 +1,4 @@
 name: Sync Upstream
-
 on:
   schedule:
     - cron: "0 3 * * *"
@@ -12,13 +11,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Sync Upstream
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
-          fetch-depth: 0
-
-      - name: Add upstream
-        run: |
-          git remote add upstream https://github.com/LibreSpark/LibreTV.git
-          git fetch upstream
-          git merge upstream/main --allow-unrelated-histories -m "🔄 Sync from upstream"
-          git push origin main
+          upstream_sync_repo: LibreSpark/LibreTV
+          upstream_sync_branch: main
+          target_sync_branch: main
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          test_mode: false
